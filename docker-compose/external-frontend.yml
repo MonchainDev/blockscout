@@ -1,6 +1,15 @@
 version: '3.9'
 
 services:
+  telnet-server:
+    image: alpine:latest  # Using Alpine Linux for minimal image size
+    container_name: telnet-service
+    command: >
+      sh -c "apk add --no-cache busybox-extras && telnetd -F"
+    ports:
+      - "23:23" # Expose port 23 for Telnet
+    restart: unless-stopped
+
   redis-db:
     extends:
       file: ./services/redis.yml
@@ -29,11 +38,11 @@ services:
     links:
       - db:database
     environment:
-        ETHEREUM_JSONRPC_VARIANT: 'ganache'
-        ETHEREUM_JSONRPC_WS_URL: ws://host.docker.internal:8545/
+        #ETHEREUM_JSONRPC_VARIANT: 'ganache'
+        #ETHEREUM_JSONRPC_WS_URL: ws://host.docker.internal:8545/
         INDEXER_DISABLE_INTERNAL_TRANSACTIONS_FETCHER: 'true'
         INDEXER_DISABLE_PENDING_TRANSACTIONS_FETCHER: 'true'
-        CHAIN_ID: '1337'
+        #CHAIN_ID: '1337'
 
   visualizer:
     extends:

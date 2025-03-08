@@ -2,10 +2,14 @@ version: '3.9'
 
 services:
   frontend:
-    image: ghcr.io/blockscout/frontend:${FRONTEND_DOCKER_TAG:-latest}
+    build:
+      context: /home/blockscout/blockscout-frontend
+    image: blockscout-frontend:local
     pull_policy: always
     platform: linux/amd64
     restart: always
     container_name: 'frontend'
+    ports:
+      - "3000:3000"
     env_file:
-      -  ../envs/common-frontend.env
+      -  /home/blockscout/blockscout-frontend/.env.local
